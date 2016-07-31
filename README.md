@@ -1,7 +1,9 @@
 # service-weezevent
 - web component service for Weez (v1)
 - Api documentation can be found [here](https://api.weezevent.com/)
+
 ***
+
 ##How to use
 Access to the API is limited to registered partners of Weezevent. All requests to the API are signed with an identifier string (API key) which is unique for each partner. Please contact Weezevent if you want to obtain an API key for your application.
 
@@ -162,7 +164,9 @@ Documentation [here](https://api.weezevent.com/)
 
 #####getEventCategories() - List of event categories
 *   render: String - optional - json|xml default json
+
 ***
+
 License
 -------
 MIT: http://mit-license.org/
