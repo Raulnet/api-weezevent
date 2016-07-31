@@ -1,5 +1,5 @@
 # service-weezevent
-- web component service for Weez (v1.0.0)
+- web component service for Weez (v1.0.0*)
 - Api documentation can be found [here](https://api.weezevent.com/)
 
 ***
@@ -30,8 +30,9 @@ Declare component and his attribute:
             on-response="myHandleResponse"
             params="{{paramsToRequest}}">
         </service-weezevent>
-***        
- ###Exemple:      
+***     
+   
+###Exemple:      
 - 1: to find your accesToken
 
         <service-weezevent
