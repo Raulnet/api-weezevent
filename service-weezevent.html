@@ -1,0 +1,221 @@
+<!--
+This file is part of the service-weezevent package
+(c) Laurent Negre <laurentnegre016@gmail.com
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code
+-->
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="/core-service-weezevent.html">
+<dom-module id="service-weezevent">
+    <template>
+        <iron-ajax
+                id="apiRequest"
+                handleAs="json"
+                on-response="_requestResponse">
+        </iron-ajax>
+    </template>
+    <script>
+        Polymer({
+            is: "service-weezevent",
+            behaviors: [CoreServiceWeezevent],
+            properties: {
+                apiKey: {
+                    type: String,
+                    value: null
+                },
+                accessToken: {
+                    type: String,
+                    value: null
+                },
+                /**
+                 * An object that contains query parameters to be appended to the request
+                 */
+                params: {
+                    type: Object,
+                    value: null
+                }
+            },
+            /**
+             * Authenticate the user and return his accessTokenKey
+             *
+             * @params {
+             *   username: string - required: Weezevent organizer or partner login,
+             *   password: string - required: Weezevent organizer or partner password,
+             *   api_key: string - required: Your API key
+             *   }
+             */
+            getAuthAccessToken: function () {
+                this._launchRequest("POST", "/auth/access_token");
+            },
+            /**
+             * List of events to which the user has access
+             *
+             * @params {
+             *   access_token: String - required: API access token
+             *   api_key: String - required: Your API key
+             *   include_not_published: Boolean - optional : Default is true.
+             *   include_closed: Boolean - optional : Default is false.
+             *   include_without_sales: Boolean - optional : Default is false.
+             *   }
+             */
+            getEvents: function () {
+                this._launchRequest("GET", "/events");
+            },
+            /**
+             * List of dates for one or multiple events
+             *
+             * @params {
+             *   access_token: String - required: API access token
+             *   api_key: String - required: Your API key
+             *   id_event: String or Array - required: Id of event
+             *   display_passed: Boolean - optional : Default false.
+             *   }
+             */
+            getDates: function () {
+                this._launchRequest("GET", "/dates");
+            },
+            /**
+             * List of price categories for one or multiple events
+             *
+             * @params {
+             *   access_token: String - required: API access token
+             *   api_key: String - required: Your API key
+             *   id_event: String or Array - required: Id of event
+             *   }
+             */
+            getTickets: function () {
+                this._launchRequest("GET", "/tickets");
+            },
+            /**
+             * Return the scan statistic for one price category
+             *
+             * @params {
+             *   access_token: String - required: API access token
+             *   api_key: String - required: Your API key
+             *   id: String - required: Id of Ticket
+             *   id_date: String - optional: id of date
+             *   }
+             */
+            getTicketStats: function () {
+                var url = "/ticket/" + this.params.id + "/stats";
+                delete this.params.id;
+                this._launchRequest("GET", url);
+            },
+            /**
+             * Return a list of participants
+             *
+             * @params {
+             *   access_token: String - required: API access token
+             *   api_key: String - required: Your API key
+             *   id_event: Array - optional
+             *   id_ticket: Array - optional
+             *   date_ticket:	Array - optional: associative array of id_date/id_ticket tuples
+             *   last_update:	String - Date (YYYY-MM-DD HH:MM:SS) - Optional
+             *   last_update_before:	Date (YYYY-MM-DD HH:MM:SS) - Optional
+             *   include_deleted:	Boolean - optional - Default is false.
+             *   moderation: Boolean - optional(beta) - Default is false.
+             *   include_unpaid: Boolean - optional - Default is false.
+             *   full: Boolean - optional - Default is false.
+             *   minimized: Boolean - optional - Default is false.
+             *   return_count: Boolean - optional
+             *   return_count_total: Boolean - optional
+             *   return_removed: Boolean - optional
+             *   max: Integer - optional
+             *   page: Integer - optional
+             *   }
+             */
+            getParticipants: function () {
+                this._launchRequest("GET", "/participants");
+            },
+            /**
+             * Return the inscription form answers of one participant
+             *
+             * @params {
+             *   access_token: String - required: API access token
+             *   api_key: String - required: Your API key
+             *   id: String - required: Id of Participant
+             *   }
+             */
+            getParticipantAnswers: function () {
+                var url = '/participant/' + this.params.id + '/answers';
+                delete this.params.id;
+                this._launchRequest("GET", url);
+            },
+            /**
+             * Update the settings of the mobile control application
+             *
+             * @params {
+             *   access_token: String - required: API access token
+             *   api_key: String - required: Your API key
+             * }
+             */
+            getScanSettings: function () {
+                this._launchRequest("GET", "/scan/settings/");
+            },
+            /**
+             * Provide a specific name for a control point
+             *
+             * @params {
+             *   access_token: String - required: API access token
+             *   api_key: String - required: Your API key
+             *   user: String - required: Name of the user
+             *   }
+             */
+            getScanUser: function () {
+                this._launchRequest("POST", "/scan/user");
+            },
+            /**
+             * Return details for specified event
+             *
+             * @params {
+             *   access_token: String - required: API access token
+             *   api_key: String - required: Your API key
+             *   id: Integer - required: Event ID
+             *   }
+             */
+            getEventDetails: function () {
+                var url = "/event/" + this.params.id + "/details/";
+                delete this.params.id;
+                this._launchRequest("GET", url);
+            },
+            /**
+             * Search for specific events
+             *
+             * @params {
+             *   access_token: String - required: API access token
+             *   api_key: String - required: Your API key
+             *   date: String - Date (YYYY-MM-DD HH:MM:SS) - optional
+             *   date_start: String - Date (YYYY-MM-DD HH:MM:SS) - optional
+             *   date_end: String - Date (YYYY-MM-DD HH:MM:SS) optional
+             *   category: Integer - optional
+             *   city: String - optional
+             *   zip_code: String - optional
+             *   country: String - optional
+             *   province: String - optional
+             *   organizer:	String - optional
+             *   render: String - optional - json|xml default json
+             *   max_result: Integer - optional
+             */
+            getEventSearch: function () {
+                var url = "/event/search/";
+                if (this.params.full) {
+                    url + 'full/';
+                    delete this.params.full;
+                }
+                this._launchRequest("GET", url);
+            },
+            /**
+             * List of event categories
+             *
+             * @params {
+             *   render: String - optional - json|xml default json
+             *   }
+             */
+            getEventCategories: function () {
+                var url = "/event/categories/";
+                this._launchRequest("GET", url);
+            },
+        });
+    </script>
+</dom-module>

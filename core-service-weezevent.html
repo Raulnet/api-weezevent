@@ -1,0 +1,122 @@
+<script>
+    /*
+     * This file is part of the service-weezevent package.
+     *
+     * (c) Laurent Negre <laurentnegre016@gmail.com>
+     *
+     * For the full copyright and license information, please view the LICENSE
+     * file that was distributed with this source code.
+     */
+    CoreServiceWeezevent = {
+        properties: {
+            /**
+             * The status of request if is in pending or not
+             */
+            isRunning: {
+                type: Boolean,
+                value: false
+            },
+            /**
+             * The URL target of the API.
+             */
+            apiUrl: {
+                type: String,
+                value: 'https://api.weezevent.com',
+                readOnly: true
+            }
+        },
+        /**
+         * Fired when a response is received.
+         *
+         * @event response
+         */
+        _requestResponse: function (e, request) {
+            this.fire('response', request.xhr.response);
+            this.isRunning = false;
+        },
+        /**
+         * Performs an AJAX request api url.
+         *
+         * @param method
+         * @param url
+         * @returns {*}
+         * @private
+         */
+        _launchRequest: function (method, url) {
+            if (!this.isRunning) {
+                this.isRunning = true;
+                this.$.apiRequest.url = this.apiUrl + url;
+                this.$.apiRequest.method = method;
+                this.$.apiRequest.params = this._getParams();
+                if (method == "POST") {
+                    this.$.apiRequest.body = this._getBody();
+                }
+                return this.$.apiRequest.generateRequest();
+            } else {
+                console.log('request allready in progress');
+                return false;
+            }
+        },
+        /**
+         * Return params converted for the request
+         *
+         * @returns {{}}
+         * @private
+         */
+        _getParams: function () {
+            var params = {};
+
+            (this.accessToken ? params["access_token"] = this.accessToken : console.log("access token undefined"));
+            (this.apiKey ? params["api_key"] = this.apiKey : console.log("api key undefined"));
+
+            var arrayParams = '[]';
+            for (var property in this.params) {
+                var data = this.params[property];
+                if (Array.isArray(data)) {
+                    if (property.indexOf(arrayParams) === -1) {
+                        property += arrayParams;
+                    }
+                    params[property] = data;
+                } else if (typeof data === 'object') {
+                    var obj = this._convertObjectParams(property, data);
+                    for (var objProperty in obj) {
+                        params[objProperty] = obj[objProperty];
+                    }
+                } else {
+                    params[property] = data;
+                }
+            }
+            return params;
+        },
+        /**
+         * Converte Object params for the params
+         *
+         * @param property
+         * @param objParam
+         * @returns {{}}
+         * @private
+         */
+        _convertObjectParams: function (property, objParam) {
+            var objectConverted = {};
+            for (var objProperty in objParam) {
+                var keyArrayParams = property + '[' + objProperty + ']';
+                objectConverted[keyArrayParams] = objParam[objProperty];
+            }
+            return objectConverted;
+        },
+        /**
+         * Convert params for the Body request on FormData params
+         *
+         * @returns {*}
+         * @private
+         */
+        _getBody: function () {
+            var body = new FormData();
+            for (var property in this.params) {
+                var data = this.params[property];
+                body.append(property, data);
+            }
+            return body;
+        }
+    }
+</script>

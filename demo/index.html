@@ -1,0 +1,101 @@
+<!--
+This file is part of the service-weezevent package
+(c) Laurent Negre <laurentnegre016@gmail.com
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>api-weezevent</title>
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="../bower_components/polymer/polymer.html">
+    <link rel="import" href="../service-weezevent.html">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900' rel='stylesheet' type='text/css'>
+</head>
+<style>
+    body{
+        text-align: center;
+        font-family: 'Roboto';
+        margin: 0px;
+    }
+    h1 {
+        background-color: #00AEEF;
+        color: #FFFFFF;
+        font-weight: normal;
+        width: 100%;
+        margin-top: 0px;
+        padding: 10px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+
+    a{
+        text-decoration: none;
+        color: #00AEEF;
+        font-weight: bold;
+        border: 2px solid #00AEEF;
+        padding: 5px 10px;
+        text-transform: uppercase;
+        background-color: #FFFFFF;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+    a:active{
+        color: #0099d7;
+        background-color: #EEE;
+    }
+
+    ul {
+        list-style-type: none;
+        -webkit-padding-start: 0px;
+        display: none;
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: 20px;
+        border: 1px solid #DDD;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        width: 40%;
+    }
+
+    ul li {
+        border-bottom: 1px solid #DDD;
+        padding: 10px 0px;
+    }
+    ul li:hover{
+        background-color: #EEE;
+    }
+</style>
+<body>
+<h1>API-WEEZEVENT</h1>
+<service-weezevent id="api"></service-weezevent>
+<a href="#" id="btn-categories">categories</a>
+<ul id="categories_list"></ul>
+<script>
+    var api = document.querySelector('#api');
+    var listLoaded = 0;
+    api.addEventListener('response', function (e) {
+        console.log(e.detail);
+        listLoaded = 1;
+        displayCategories(e.detail.event_categories);
+    });
+    document.querySelector('#btn-categories').addEventListener("click", function (e) {
+        e.preventDefault();
+        if(listLoaded == 0){
+            api.getEventCategories();
+        }
+
+    })
+    var displayCategories = function (obj) {
+        var list = document.querySelector('#categories_list')
+        list.style.display = "block";
+        for (var p in obj){
+            var node = document.createElement("LI");
+            var textnode = document.createTextNode("#"+ obj[p].id +" - " + obj[p].name_other);
+            node.appendChild(textnode);
+            list.appendChild(node);
+        }
+    }
+</script>
+</body>
+</html>

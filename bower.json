@@ -1,0 +1,26 @@
+{
+  "name": "service-weezevent",
+  "homepage": "https://github.com/Raulnet/api-weezevent",
+  "description": "web component service for api weezevent",
+  "main": ["core-service-weezevent.html", "service-weezevent.html"],
+  "dependencies": {
+    "polymer": "^1.6.0",
+    "iron-ajax": "PolymerElements/iron-ajax#^1.4.3"
+  },
+  "keywords": [
+    "api",
+    "service",
+    "weezevent",
+    "polymer",
+    "web-component",
+    "web-components",
+    "iron-ajax"
+  ],
+  "authors": [
+    "raulnet - laurentnegre016@gmail.com"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "bower_components"
+  ]
+}
