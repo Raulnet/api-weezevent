@@ -7,7 +7,7 @@
 ##How to use
 Access to the API is limited to registered partners of Weezevent. All requests to the API are signed with an identifier string (API key) which is unique for each partner. Please contact Weezevent if you want to obtain an API key for your application.
 
-The API is built on HTTP and is RESTful. By default, all data is returned in JSON format. When it’s possible, data can be returned in XML format.
+The API is built on HTTP and is RESTfull. By default, all data is returned in JSON format. When it’s possible, data can be returned in XML format.
 
 ###Installation
 bower
