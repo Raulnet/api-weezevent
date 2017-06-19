@@ -1,12 +1,12 @@
 {
   "name": "service-weezevent",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "homepage": "https://github.com/Raulnet/api-weezevent",
   "description": "web component service for api weezevent",
   "main": ["core-service-weezevent.html", "service-weezevent.html"],
   "dependencies": {
-    "polymer": "^1.6.0",
-    "iron-ajax": "PolymerElements/iron-ajax#^1.4.3"
+    "polymer": "^2.0.0",
+    "iron-ajax": "PolymerElements/iron-ajax#^2.0.0"
   },
   "keywords": [
     "api",

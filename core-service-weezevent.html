@@ -7,116 +7,119 @@
      * For the full copyright and license information, please view the LICENSE
      * file that was distributed with this source code.
      */
-    CoreServiceWeezevent = {
-        properties: {
-            /**
-             * The status of request if is in pending or not
-             */
-            isRunning: {
-                type: Boolean,
-                value: false
-            },
-            /**
-             * The URL target of the API.
-             */
-            apiUrl: {
-                type: String,
-                value: 'https://api.weezevent.com',
-                readOnly: true
-            }
-        },
-        /**
-         * Fired when a response is received.
-         *
-         * @event response
-         */
-        _requestResponse: function (e, request) {
-            this.fire('response', request.xhr.response);
-            this.isRunning = false;
-        },
-        /**
-         * Performs an AJAX request api url.
-         *
-         * @param method
-         * @param url
-         * @returns {*}
-         * @private
-         */
-        _launchRequest: function (method, url) {
-            if (!this.isRunning) {
-                this.isRunning = true;
-                this.$.apiRequest.url = this.apiUrl + url;
-                this.$.apiRequest.method = method;
-                this.$.apiRequest.params = this._getParams();
-                if (method == "POST") {
-                    this.$.apiRequest.body = this._getBody();
-                }
-                return this.$.apiRequest.generateRequest();
-            } else {
-                console.log('request allready in progress');
-                return false;
-            }
-        },
-        /**
-         * Return params converted for the request
-         *
-         * @returns {{}}
-         * @private
-         */
-        _getParams: function () {
-            var params = {};
-
-            (this.accessToken ? params["access_token"] = this.accessToken : console.log("access token undefined"));
-            (this.apiKey ? params["api_key"] = this.apiKey : console.log("api key undefined"));
-
-            var arrayParams = '[]';
-            for (var property in this.params) {
-                var data = this.params[property];
-                if (Array.isArray(data)) {
-                    if (property.indexOf(arrayParams) === -1) {
-                        property += arrayParams;
+    CoreServiceWeezevent = function(superClass){
+        return class extends superClass {
+            static get properties() {
+                return {
+                    /**
+                     * The status of request if is in pending or not
+                     */
+                    isRunning: {
+                        type: Boolean,
+                        value: false
+                    },
+                    /**
+                     * The URL target of the API.
+                     */
+                    apiUrl: {
+                        type: String,
+                        value: 'https://api.weezevent.com',
+                        readOnly: true
                     }
-                    params[property] = data;
-                } else if (typeof data === 'object') {
-                    var obj = this._convertObjectParams(property, data);
-                    for (var objProperty in obj) {
-                        params[objProperty] = obj[objProperty];
+                };
+            }
+            /**
+             * Fired when a response is received.
+             *
+             * @event response
+             */
+            _requestResponse (e, request) {
+                this.dispatchEvent(new CustomEvent('response', {detail: request.xhr.response}));
+                this.isRunning = false;
+            }
+            /**
+             * Performs an AJAX request api url.
+             *
+             * @param method
+             * @param url
+             * @returns {*}
+             * @private
+             */
+            _launchRequest (method, url) {
+                if (!this.isRunning) {
+                    this.isRunning = true;
+                    this.$.apiRequest.url = this.apiUrl + url;
+                    this.$.apiRequest.method = method;
+                    this.$.apiRequest.params = this._getParams();
+                    if (method === "POST") {
+                        this.$.apiRequest.body = this._getBody();
                     }
+                    return this.$.apiRequest.generateRequest();
                 } else {
-                    params[property] = data;
+                    console.log('request allready in progress');
+                    return false;
                 }
             }
-            return params;
-        },
-        /**
-         * Converte Object params for the params
-         *
-         * @param property
-         * @param objParam
-         * @returns {{}}
-         * @private
-         */
-        _convertObjectParams: function (property, objParam) {
-            var objectConverted = {};
-            for (var objProperty in objParam) {
-                var keyArrayParams = property + '[' + objProperty + ']';
-                objectConverted[keyArrayParams] = objParam[objProperty];
+            /**
+             * Return params converted for the request
+             *
+             * @returns {{}}
+             * @private
+             */
+            _getParams () {
+                let params = {};
+                (this.accessToken ? params["access_token"] = this.accessToken : console.log("access token undefined"));
+                (this.apiKey ? params["api_key"] = this.apiKey : console.log("api key undefined"));
+
+                let arrayParams = '[]';
+                for (let property in this.params) {
+                    let data = this.params[property];
+                    if (Array.isArray(data)) {
+                        if (property.indexOf(arrayParams) === -1) {
+                            property += arrayParams;
+                        }
+                        params[property] = data;
+                    } else if (typeof data === 'object') {
+                        let obj = this._convertObjectParams(property, data);
+                        for (let objProperty in obj) {
+                            params[objProperty] = obj[objProperty];
+                        }
+                    } else {
+                        params[property] = data;
+                    }
+                }
+                return params;
             }
-            return objectConverted;
-        },
-        /**
-         * Convert params for the Body request on FormData params
-         *
-         * @returns {*}
-         * @private
-         */
-        _getBody: function () {
-            var body = new FormData();
-            for (var property in this.params) {
-                var data = this.params[property];
-                body.append(property, data);
+            /**
+             * Converte Object params for the params
+             *
+             * @param property
+             * @param objParam
+             * @returns {{}}
+             * @private
+             */
+            _convertObjectParams (property, objParam) {
+                let objectConverted = {};
+                for (let objProperty in objParam) {
+                    let keyArrayParams = property + '[' + objProperty + ']';
+                    objectConverted[keyArrayParams] = objParam[objProperty];
+                }
+                return objectConverted;
             }
-            return body;
+            /**
+             * Convert params for the Body request on FormData params
+             *
+             * @returns {*}
+             * @private
+             */
+            _getBody () {
+                let body = new FormData();
+                for (let property in this.params) {
+                    let data = this.params[property];
+                    body.append(property, data);
+                }
+                return body;
+            }
         }
     }
 </script>

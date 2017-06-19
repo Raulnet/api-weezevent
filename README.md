@@ -1,5 +1,5 @@
 # service-weezevent
-- web component service for Weez (v1.0.0*)
+- web component service for Weez (v1.2.0*)
 - Api documentation can be found [here](https://api.weezevent.com/)
 
 ***
