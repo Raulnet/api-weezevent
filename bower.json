@@ -1,6 +1,6 @@
 {
   "name": "service-weezevent",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "homepage": "https://github.com/Raulnet/api-weezevent",
   "description": "web component service for api weezevent",
   "main": "service-weezevent.html",
