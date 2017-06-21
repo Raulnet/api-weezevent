@@ -159,11 +159,11 @@ Documentation [here](https://api.weezevent.com/)
 *   api_key: String - required: Your API key
 *   id: String - required: Id of Participant
 
-#####getScanSettings() - Update the settings of the mobile control application
+##### getScanSettings() - Update the settings of the mobile control application
 *   access_token: String - required: API access token
 *   api_key: String - required: Your API key
                    
-#####getScanUser() - Provide a specific name for a control point
+##### getScanUser() - Provide a specific name for a control point
 *   access_token: String - required: API access token
 *   api_key: String - required: Your API key
 *   user: String - required: Name of the user
