@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <title>service-weezevent demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../service-weezevent.html">
+
+    <custom-style>
+        <style is="custom-style" include="demo-pages-shared-styles">
+        </style>
+    </custom-style>
+</head>
+<body>
+<div class="vertical-section-container centered">
+    <h3>Basic service-weezevent demo</h3>
+    <demo-snippet>
+        <template>
+            <service-weezevent id="api"></service-weezevent>
+            <button id="btn-categories">get categories</button>
+            <ul id="categories-list"></ul>
+            <script>
+                const api = document.querySelector('#api');
+                let listLoaded = 0;
+                api.addEventListener('api-weezevent-response', function (e) {
+                    listLoaded = 1;
+                    console.log(e.detail);
+                    displayCategories(e.detail.event_categories);
+                });
+                document.querySelector('#btn-categories').addEventListener("click", function () {
+                    if(listLoaded === 0){
+                        api.getEventCategories();
+                    }
+                });
+                let displayCategories = function (obj) {
+                    let list = document.querySelector('#categories-list');
+                    list.setAttribute('style', 'list-style-type: none; margin: 10px 0px; padding: 0; display: block;');
+                    for (let p in obj){
+                        let node = document.createElement("LI");
+                        let textnode = document.createTextNode("#"+ obj[p].id +" - " + obj[p].name_other);
+                        node.appendChild(textnode);
+                        list.appendChild(node);
+                    }
+                }
+            </script>
+        </template>
+    </demo-snippet>
+</div>
+</body>
+</html>
