@@ -25,8 +25,20 @@
                         type: String,
                         value: 'https://api.weezevent.com',
                         readOnly: true
+                    },
+                    /**
+                     * Api Weezevent Custom Event Response
+                     */
+                    apiFireResponse: {
+                        type: String,
+                        value: 'api-weezevent-response',
+                        readOnly: false
                     }
                 };
+            }
+            ready() {
+                super.ready(); // for 2.0 class-based elements only
+                this.apiRequest = this.$.apiRequest;
             }
             /**
              * Fired when a response is received.
@@ -34,7 +46,7 @@
              * @event response
              */
             _requestResponse (e, request) {
-                this.dispatchEvent(new CustomEvent('response', {detail: request.xhr.response}));
+                this.dispatchEvent(new CustomEvent(this.apiFireResponse, {detail: request.xhr.response}));
                 this.isRunning = false;
             }
             /**
@@ -48,13 +60,13 @@
             _launchRequest (method, url) {
                 if (!this.isRunning) {
                     this.isRunning = true;
-                    this.$.apiRequest.url = this.apiUrl + url;
-                    this.$.apiRequest.method = method;
-                    this.$.apiRequest.params = this._getParams();
+                    this.apiRequest.url = this.apiUrl + url;
+                    this.apiRequest.method = method;
+                    this.apiRequest.params = this._getParams();
                     if (method === "POST") {
-                        this.$.apiRequest.body = this._getBody();
+                        this.apiRequest.body = this._getBody();
                     }
-                    return this.$.apiRequest.generateRequest();
+                    return this.apiRequest.generateRequest();
                 } else {
                     console.log('request allready in progress');
                     return false;
