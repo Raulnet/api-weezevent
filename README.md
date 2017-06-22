@@ -1,7 +1,7 @@
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/Raulnet/service-weezevent)
 # \<service-weezevent\>
 
-- web component service for Weezevent-api (v1.2.3*)
+- web component service for Weezevent-api (v1.2.5*)
 - Weezevent Api documentation can be found [here](https://api.weezevent.com/)
 
 ***
@@ -10,7 +10,6 @@
 bower
         
     bower install service-weezevent --save
-
 
 ## Usage
 Access to the API is limited to registered partners of Weezevent. All requests to the API are signed with an identifier string (API key) which is unique for each partner. Please contact Weezevent if you want to obtain an API key for your application.
