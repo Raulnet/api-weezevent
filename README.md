@@ -1,7 +1,7 @@
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/Raulnet/service-weezevent)
 # \<service-weezevent\>
 
-- web component service for Weezevent-api (v1.2.5*)
+- web component service for Weezevent-api (v1.2.6*)
 - Weezevent Api documentation can be found [here](https://api.weezevent.com/)
 
 ***
